@@ -2,6 +2,7 @@ from db_connection import create_connection, close_connection
 import bot_func
 import telebot
 from telebot import types
+import threading
 
 # Константы для состояния пользователя
 STATE_NAME = 0
@@ -76,7 +77,7 @@ def get_members(message):
 
         user_state[message.chat.id] = None
 
-if __name__ == '__main__':
+def run_bot():
     db_config = {
         "db_name": "postgres",
         "db_user": "postgres",
@@ -88,9 +89,13 @@ if __name__ == '__main__':
     conn = None
     try:
         conn = create_connection(**db_config)
+        global bot_func
         bot_func = bot_func.Bot_func(conn)
+        global bot
         bot = telebot.TeleBot("7648621881:AAF-7OGKQlkzSF6ngKYvw6uLLfvg8LxQ7wY")
+        global user_data
         user_data = {}
+        global user_state
         user_state = {}
 
         bot.message_handler(commands=['start'])(start)
@@ -108,3 +113,7 @@ if __name__ == '__main__':
     finally:
         if conn:
             close_connection(conn)
+
+if __name__ == '__main__':
+    bot_thread = threading.Thread(target=run_bot)
+    bot_thread.start()
