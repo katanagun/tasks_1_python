@@ -71,6 +71,8 @@ class Quaternion:
         Возвращает обратный кватернион.
         """
         norm_sq = self.norm() ** 2
+        if norm_sq == 0:
+            raise ValueError("Норма кватерниона равна нулю. Невозможно вычислить обратный кватернион.")
         return Quaternion(self.w * (1 / norm_sq),
                           -self.x * (1 / norm_sq),
                           -self.y * (1 / norm_sq),
