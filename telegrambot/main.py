@@ -86,18 +86,16 @@ def run_bot():
         "db_port": "5432"
     }
 
-    conn = None
+    conn = create_connection(**db_config)
+    global bot_func
+    bot_func = bot_func.Bot_func(conn)
+    global bot
+    bot = telebot.TeleBot("7648621881:AAF-7OGKQlkzSF6ngKYvw6uLLfvg8LxQ7wY")
+    global user_data
+    user_data = {}
+    global user_state
+    user_state = {}
     try:
-        conn = create_connection(**db_config)
-        global bot_func
-        bot_func = bot_func.Bot_func(conn)
-        global bot
-        bot = telebot.TeleBot("7648621881:AAF-7OGKQlkzSF6ngKYvw6uLLfvg8LxQ7wY")
-        global user_data
-        user_data = {}
-        global user_state
-        user_state = {}
-
         bot.message_handler(commands=['start'])(start)
         bot.message_handler(func=lambda message: user_state.get(message.chat.id) == STATE_NAME)(get_name)
         bot.message_handler(func=lambda message: message.text == 'Создать событие')(create_event)
