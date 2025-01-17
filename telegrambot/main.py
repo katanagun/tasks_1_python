@@ -19,7 +19,7 @@ def start(message):
 
 def get_name(message):
     user_input = message.text.split()
-    if len(user_input) < 2:
+    if len(user_input) != 2:
         bot.send_message(message.chat.id, 'Пожалуйста, введите имя и фамилию через пробел.')
         return
 
